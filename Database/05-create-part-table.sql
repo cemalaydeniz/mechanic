@@ -1,0 +1,9 @@
+CREATE TABLE `Part`(
+    `Id` INT NOT NULL AUTO_INCREMENT,
+    `Name` VARCHAR(50) NOT NULL,
+    `NumberUsed` INT NOT NULL,
+    `Price` DECIMAL(17,2) NOT NULL,
+    `Service_Id` INT NOT NULL,
+    PRIMARY KEY(`Id`),
+    FOREIGN KEY(`Service_Id`) REFERENCES `Service`(`Id`) ON DELETE CASCADE
+)

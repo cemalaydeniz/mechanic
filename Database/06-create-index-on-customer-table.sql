@@ -1,0 +1,1 @@
+CREATE INDEX `Name_Index` ON `Customer`(`Name`)
