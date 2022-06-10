@@ -2,8 +2,44 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Mechanic"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Views\ServicesWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="MainGrid" TargetType="Grid">
+            <Setter Property="Margin" Value="10 5 10 5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
+        
+        <Style x:Key="InputFieldName" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="OneLineInputField" TargetType="TextBox">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="23"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10 0 10 0"/>
+        </Style>
+
+        <Style x:Key="ClassicButton" TargetType="Button">
+            <Setter Property="Width" Value="75"/>
+            <Setter Property="Height" Value="23"/>
+        </Style>
+        <Style x:Key="ServiceButton" TargetType="Button">
+            <Setter Property="Width" Value="125"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+        <Style x:Key="PagingButton" TargetType="Button">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="23"/>
+            <Setter Property="Margin" Value="5 10 5 5"/>
+        </Style>
+
+        <Style x:Key="ClassicListViewColumn" TargetType="GridViewColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="5 0 0 0"/>
+            <Setter Property="IsHitTestVisible" Value="False"/>
+        </Style>
     </Application.Resources>
 </Application>

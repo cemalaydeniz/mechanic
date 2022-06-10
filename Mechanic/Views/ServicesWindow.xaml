@@ -1,0 +1,187 @@
+﻿<Window x:Class="Mechanic.Views.ServicesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mechanic.Views"
+        mc:Ignorable="d"
+        Title="Services" Height="680" Width="1030">
+    <Grid Style="{StaticResource MainGrid}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Search group boxes -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <GroupBox Header="Search by Vehicle">
+                <Grid Margin="10 10 0 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource InputFieldName}"
+                                   Text="LicensePlate"/>
+                        <TextBox Style="{StaticResource OneLineInputField}"
+                                 MaxLength="15"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Row="1" Orientation="Horizontal"
+                                Margin="0 10 0 0">
+                        <TextBlock Style="{StaticResource InputFieldName}"
+                                   Text="Make"/>
+                        <TextBox Style="{StaticResource OneLineInputField}"
+                                 MaxLength="50"/>
+
+                        <TextBlock Style="{StaticResource InputFieldName}"
+                                   Text="Model"/>
+                        <TextBox Style="{StaticResource OneLineInputField}"
+                                 MaxLength="50"/>
+
+                        <TextBlock Style="{StaticResource InputFieldName}"
+                                   Text="Year"/>
+                        <TextBox Style="{StaticResource OneLineInputField}"
+                                 MaxLength="4"/>
+
+                        <TextBlock Style="{StaticResource InputFieldName}"
+                                   Text="Color"/>
+                        <TextBox Style="{StaticResource OneLineInputField}"
+                                 MaxLength="30"/>
+                    </StackPanel>
+
+                    <Button Grid.Row="2" HorizontalAlignment="Right"
+                            Style="{StaticResource ClassicButton}"
+                            Margin="0 10 10 0"
+                            Content="Clear"/>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Search by Customer"
+                      Margin="10 0 0 0">
+                <Grid Margin="10 10 0 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource InputFieldName}"
+                                   Text="Name"/>
+                        <TextBox Width="295" Height="23"
+                                 VerticalContentAlignment="Center"
+                                 Margin="10 0 10 0"/>
+                    </StackPanel>
+
+                    <Button Grid.Row="1" HorizontalAlignment="Right"
+                            Style="{StaticResource ClassicButton}"
+                            Margin="0 10 10 0"
+                            Content="Clear"/>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+        
+        <!-- List view and the buttons related to list view -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal"
+                    Height="450"
+                    Margin="0 10 0 0">
+            <ListView ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      ScrollViewer.CanContentScroll="False">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="License Plate" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="100"/>
+                        <GridViewColumn Header="Make" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="90"/>
+                        <GridViewColumn Header="Model" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="100"/>
+                        <GridViewColumn Header="Year" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="50"/>
+                        <GridViewColumn Header="Color" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="80"/>
+                        <GridViewColumn Header="Customer" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="150"/>
+                        <GridViewColumn Header="Enter Date" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="80"/>
+                        <GridViewColumn Header="Exit Date" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="80"/>
+                        <GridViewColumn Header="Details" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Show"
+                                            HorizontalAlignment="Center"
+                                            Width="80"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Button Grid.Row="0"
+                        Style="{StaticResource ServiceButton}"
+                        Margin="10 0 0 5">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Icons/add-icon.png" Height="23" Margin="5 0 0 0"/>
+                            <TextBlock Text="New Service" VerticalAlignment="Center" Margin="7 0 0 0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Row="1"
+                        Style="{StaticResource ServiceButton}"
+                        Margin="10 5 0 5">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Icons/edit-icon.png" Height="23" Margin="5 0 0 0"/>
+                            <TextBlock Text="Edit Service" VerticalAlignment="Center" Margin="7 0 0 0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Row="2"
+                        Style="{StaticResource ServiceButton}"
+                        Margin="10 5 0 5">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Icons/delete-icon.png" Height="23" Margin="5 0 0 0"/>
+                            <TextBlock Text="Delete Service" VerticalAlignment="Center" Margin="7 0 0 0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <Button Grid.Row="3"
+                        Style="{StaticResource ServiceButton}"
+                        VerticalAlignment="Bottom"
+                        Margin="10 5 0 5">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Icons/delete-icon.png" Height="23" Margin="5 0 0 0"/>
+                            <TextBlock Text="Delete Vehicle" VerticalAlignment="Center" Margin="7 0 0 0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </StackPanel>
+        
+        <!-- Paging -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Style="{StaticResource PagingButton}"
+                    Content="&lt;&lt;"/>
+            <Button Style="{StaticResource PagingButton}"
+                    Content="&lt;"/>
+            <TextBox Width="80" Height="23"
+                     Text="1 / 10"
+                     TextAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     Margin="5 10 5 5"
+                     IsHitTestVisible="False"/>
+            <Button Style="{StaticResource PagingButton}"
+                    Content="&gt;"/>
+            <Button Style="{StaticResource PagingButton}"
+                    Content="&gt;&gt;"/>
+        </StackPanel>
+    </Grid>
+</Window>
