@@ -1,0 +1,229 @@
+﻿<Window x:Class="Mechanic.Views.EditServiceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mechanic.Views"
+        mc:Ignorable="d"
+        Title="EditServiceWindow" Height="635" Width="650">
+    <Grid Style="{StaticResource MainGrid}" Grid.IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Vehicle data -->
+        <GroupBox Grid.Row="0" Header="Vehicle">
+            <Grid Margin="10 10 0 5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource InputFieldName}"
+                               Text="License Plate"/>
+                    <TextBox Style="{StaticResource OneLineInputField}"
+                             MaxLength="15"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal"
+                            Margin="0 10 0 0">
+                    <TextBlock Style="{StaticResource InputFieldName}"
+                               Text="Make"/>
+                    <TextBox Style="{StaticResource OneLineInputField}"
+                             MaxLength="50"/>
+
+                    <TextBlock Style="{StaticResource InputFieldName}"
+                               Text="Model"/>
+                    <TextBox Style="{StaticResource OneLineInputField}"
+                             MaxLength="50"/>
+
+                    <TextBlock Style="{StaticResource InputFieldName}"
+                               Text="Year"/>
+                    <TextBox Style="{StaticResource OneLineInputField}"
+                             MaxLength="4"/>
+
+                    <TextBlock Style="{StaticResource InputFieldName}"
+                               Text="Color"/>
+                    <TextBox Style="{StaticResource OneLineInputField}"
+                             MaxLength="30"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        
+        <!-- Customer data -->
+        <GroupBox Grid.Row="1" Header="Customer"
+                  Margin="0 5 0 0">
+            <Grid Margin="10 5 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" SharedSizeGroup="HeaderColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Style="{StaticResource InputFieldName}"
+                           Text="Name"
+                           HorizontalAlignment="Left"
+                           Margin="0 0 0 10"/>
+                <TextBox Grid.Row="0" Grid.Column="1"
+                         HorizontalAlignment="Stretch"
+                         Height="23"
+                         VerticalContentAlignment="Center"
+                         Margin="10 0 7 10"
+                         MaxLength="70"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           Style="{StaticResource InputFieldName}"
+                           Text="Contact"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"/>
+                <TextBox Grid.Row="1" Grid.Column="1"
+                         HorizontalAlignment="Stretch"
+                         Height="70"
+                         VerticalContentAlignment="Top"
+                         Margin="10 0 7 5"
+                         TextWrapping="Wrap" AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"
+                         MaxLength="255"/>
+            </Grid>
+        </GroupBox>
+        
+        <!-- Service data -->
+        <GroupBox Grid.Row="2" Header="Service"
+                  Margin="0 5 0 0">
+            <Grid Margin="10 5 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" SharedSizeGroup="HeaderColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Details -->
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Style="{StaticResource InputFieldName}"
+                           Text="Details"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"/>
+                <TextBox Grid.Row="0" Grid.Column="1"
+                         HorizontalAlignment="Stretch"
+                         Height="100"
+                         VerticalContentAlignment="Top"
+                         Margin="10 0 7 10"
+                         TextWrapping="Wrap" AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Visible"
+                         MaxLength="65535"/>
+                
+                <!-- Parts -->
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           Style="{StaticResource InputFieldName}"
+                           Text="Parts"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           Margin="0 0 0 5"/>
+                <Border Grid.Row="1" Grid.Column="1"
+                        BorderBrush="Black" BorderThickness="1"
+                        Margin="10 0 7 10"
+                        Height="90">
+                    <ScrollViewer>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                    Margin="5 5 5 5">
+                            <ItemsControl>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="0 0 0 5">
+                                            <TextBlock Style="{StaticResource InputFieldName}"
+                                                       Text="Name"
+                                                       HorizontalAlignment="Left"/>
+                                            <TextBox Style="{StaticResource OneLineInputField}"
+                                                     MaxLength="50"/>
+
+                                            <TextBlock Style="{StaticResource InputFieldName}"
+                                                       Text="Number Used"
+                                                       HorizontalAlignment="Left"/>
+                                            <TextBox Style="{StaticResource OneLineInputField}"
+                                                     Width="70" Height="23"
+                                                     MaxLength="5"/>
+
+                                            <TextBlock Style="{StaticResource InputFieldName}"
+                                                       Text="Price"
+                                                       HorizontalAlignment="Left"/>
+                                            <TextBox Style="{StaticResource OneLineInputField}"
+                                                     MaxLength="17"/>
+
+                                            <Button Width="23" Height="23"
+                                                    Content="X"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Button Style="{StaticResource ClassicButton}"
+                                    Content="Add"
+                                    HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+                
+                <!-- Dates -->
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           Style="{StaticResource InputFieldName}"
+                           Text="Enter Date"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Margin="0 0 0 10"/>
+                <StackPanel Grid.Row="2" Grid.Column="1"
+                            Orientation="Horizontal"
+                            Margin="10 0 10 10">
+                    <DatePicker VerticalAlignment="Center"
+                                Margin="0 0 10 0"/>
+                    <TextBlock Style="{StaticResource InputFieldName}"
+                               Text="Exit Date"/>
+                    <DatePicker VerticalAlignment="Center"
+                                Margin="10 0 10 0"
+                                IsEnabled="{Binding ElementName=Cbx_Finished, Path=IsChecked}"/>
+                    <CheckBox x:Name="Cbx_Finished"
+                              VerticalAlignment="Center"
+                              Content="Finished"/>
+                </StackPanel>
+                
+                <!-- Fee -->
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                           Style="{StaticResource InputFieldName}"
+                           Text="Fee"
+                           HorizontalAlignment="Left"
+                           Margin="0 0 0 5"/>
+                <TextBox Grid.Row="3" Grid.Column="1"
+                         Style="{StaticResource OneLineInputField}"
+                         HorizontalAlignment="Left"
+                         MaxLength="17"
+                         Margin="10 0 0 5"/>
+            </Grid>
+        </GroupBox>
+
+        <Button Grid.Row="3"
+                HorizontalAlignment="Right"
+                Margin="0 7 0 0"
+                Padding="5 5 15 5">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Icons/save-icon.png" Height="23" Margin="5 0 0 0"/>
+                    <TextBlock Text="Save" VerticalAlignment="Center" Margin="7 0 0 0"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
+    </Grid>
+</Window>
