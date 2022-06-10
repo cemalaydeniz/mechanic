@@ -155,7 +155,7 @@
                 <Button Grid.Row="3"
                         Style="{StaticResource ServiceButton}"
                         VerticalAlignment="Bottom"
-                        Margin="10 5 0 5">
+                        Margin="10 5 0 0">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Icons/delete-icon.png" Height="23" Margin="5 0 0 0"/>
