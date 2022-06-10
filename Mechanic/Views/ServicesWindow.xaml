@@ -25,7 +25,7 @@
 
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
                         <TextBlock Style="{StaticResource InputFieldName}"
-                                   Text="LicensePlate"/>
+                                   Text="License Plate"/>
                         <TextBox Style="{StaticResource OneLineInputField}"
                                  MaxLength="15"/>
                     </StackPanel>
