@@ -5,13 +5,19 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>app-icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Icons\add-icon.png" />
+    <None Remove="Icons\app-icon.ico" />
     <None Remove="Icons\delete-icon.png" />
     <None Remove="Icons\edit-icon.png" />
     <None Remove="Icons\save-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="app-icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +30,7 @@
 
   <ItemGroup>
     <Resource Include="Icons\add-icon.png" />
+    <Resource Include="Icons\app-icon.ico" />
     <Resource Include="Icons\delete-icon.png" />
     <Resource Include="Icons\edit-icon.png" />
     <Resource Include="Icons\save-icon.png" />
