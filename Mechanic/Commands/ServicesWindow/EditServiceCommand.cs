@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Mechanic.Commands.ServicesWindow
+{
+    public class EditServiceCommand : CommandBase
+    {
+        public override void Execute(object? parameter)
+        {
+            // TODO: Will be implemented after Edit Service window's viewmodel is completed
+        }
+    }
+}

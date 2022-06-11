@@ -4,8 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mechanic.Views"
+        xmlns:vm="clr-namespace:Mechanic.ViewModels"
+        xmlns:converters="clr-namespace:Mechanic.Converters"
         mc:Ignorable="d"
-        Title="Services" Height="680" Width="1030">
+        Title="Services" Height="680" Width="1030"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:ServicesViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:NotNullToBoolConverter x:Key="NotNullToBool"/>
+    </Window.Resources>
     <Grid Style="{StaticResource MainGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -27,36 +36,42 @@
                         <TextBlock Style="{StaticResource InputFieldName}"
                                    Text="License Plate"/>
                         <TextBox Style="{StaticResource OneLineInputField}"
-                                 MaxLength="15"/>
+                                 MaxLength="15"
+                                 Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
-                    
+
                     <StackPanel Grid.Row="1" Orientation="Horizontal"
                                 Margin="0 10 0 0">
                         <TextBlock Style="{StaticResource InputFieldName}"
                                    Text="Make"/>
                         <TextBox Style="{StaticResource OneLineInputField}"
-                                 MaxLength="50"/>
+                                 MaxLength="50"
+                                 Text="{Binding Make, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <TextBlock Style="{StaticResource InputFieldName}"
                                    Text="Model"/>
                         <TextBox Style="{StaticResource OneLineInputField}"
-                                 MaxLength="50"/>
+                                 MaxLength="50"
+                                 Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <TextBlock Style="{StaticResource InputFieldName}"
                                    Text="Year"/>
                         <TextBox Style="{StaticResource OneLineInputField}"
-                                 MaxLength="4"/>
+                                 MaxLength="4"
+                                 Text="{Binding Year, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"/>
 
                         <TextBlock Style="{StaticResource InputFieldName}"
                                    Text="Color"/>
                         <TextBox Style="{StaticResource OneLineInputField}"
-                                 MaxLength="30"/>
+                                 MaxLength="30"
+                                 Text="{Binding Color, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
 
                     <Button Grid.Row="2" HorizontalAlignment="Right"
                             Style="{StaticResource ClassicButton}"
                             Margin="0 10 10 0"
-                            Content="Clear"/>
+                            Content="Clear"
+                            Command="{Binding ClearVehicleSearchCommand}"/>
                 </Grid>
             </GroupBox>
 
@@ -73,39 +88,45 @@
                                    Text="Name"/>
                         <TextBox Width="295" Height="23"
                                  VerticalContentAlignment="Center"
-                                 Margin="10 0 10 0"/>
+                                 Margin="10 0 10 0"
+                                 Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
 
                     <Button Grid.Row="1" HorizontalAlignment="Right"
                             Style="{StaticResource ClassicButton}"
                             Margin="0 10 10 0"
-                            Content="Clear"/>
+                            Content="Clear"
+                            Command="{Binding ClearCustomerSearchCommand}"/>
                 </Grid>
             </GroupBox>
         </StackPanel>
-        
+
         <!-- List view and the buttons related to list view -->
         <StackPanel Grid.Row="1" Orientation="Horizontal"
                     Height="450"
                     Margin="0 10 0 0">
-            <ListView ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      ScrollViewer.CanContentScroll="False">
+            <ListView ItemsSource="{Binding Services}" x:Name="LV_Services"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      ScrollViewer.CanContentScroll="False"
+                      SelectionMode="Single">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="License Plate" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="100"/>
-                        <GridViewColumn Header="Make" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="90"/>
-                        <GridViewColumn Header="Model" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="100"/>
-                        <GridViewColumn Header="Year" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="50"/>
-                        <GridViewColumn Header="Color" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="80"/>
-                        <GridViewColumn Header="Customer" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="150"/>
-                        <GridViewColumn Header="Enter Date" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="80"/>
-                        <GridViewColumn Header="Exit Date" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="80"/>
+                        <GridViewColumn Header="License Plate" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="100" DisplayMemberBinding="{Binding Vehicle.LicensePlate}"/>
+                        <GridViewColumn Header="Make" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="90" DisplayMemberBinding="{Binding Vehicle.Make}"/>
+                        <GridViewColumn Header="Model" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="100" DisplayMemberBinding="{Binding Vehicle.Model}"/>
+                        <GridViewColumn Header="Year" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="50" DisplayMemberBinding="{Binding Vehicle.Year}"/>
+                        <GridViewColumn Header="Color" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="80" DisplayMemberBinding="{Binding Vehicle.Color}"/>
+                        <GridViewColumn Header="Customer" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="150" DisplayMemberBinding="{Binding Vehicle.Customer.Name, FallbackValue=n/a, TargetNullValue=n/a}"/>
+                        <GridViewColumn Header="Enter Date" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="80" DisplayMemberBinding="{Binding EnterDate}"/>
+                        <GridViewColumn Header="Exit Date" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="80" DisplayMemberBinding="{Binding ExitDate, TargetNullValue=In Service...}"/>
                         <GridViewColumn Header="Details" HeaderContainerStyle="{StaticResource ClassicListViewColumn}" Width="100">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Content="Show"
                                             HorizontalAlignment="Center"
-                                            Width="80"/>
+                                            Width="80"
+                                            Command="{Binding Path=DataContext.ShowServiceCommand, RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}}"
+                                            CommandParameter="{Binding Id}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -123,7 +144,8 @@
 
                 <Button Grid.Row="0"
                         Style="{StaticResource ServiceButton}"
-                        Margin="10 0 0 5">
+                        Margin="10 0 0 5"
+                        Command="{Binding NewServiceCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Icons/add-icon.png" Height="23" Margin="5 0 0 0"/>
@@ -133,7 +155,10 @@
                 </Button>
                 <Button Grid.Row="1"
                         Style="{StaticResource ServiceButton}"
-                        Margin="10 5 0 5">
+                        Margin="10 5 0 5"
+                        Command="{Binding EditServiceCommand}"
+                        CommandParameter="{Binding ElementName=LV_Services, Path=SelectedItem}"
+                        IsEnabled="{Binding ElementName=LV_Services, Path=SelectedItem, Converter={StaticResource NotNullToBool}}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Icons/edit-icon.png" Height="23" Margin="5 0 0 0"/>
@@ -143,7 +168,10 @@
                 </Button>
                 <Button Grid.Row="2"
                         Style="{StaticResource ServiceButton}"
-                        Margin="10 5 0 5">
+                        Margin="10 5 0 5"
+                        Command="{Binding DeleteServiceCommand}"
+                        CommandParameter="{Binding ElementName=LV_Services, Path=SelectedItem}"
+                        IsEnabled="{Binding ElementName=LV_Services, Path=SelectedItem, Converter={StaticResource NotNullToBool}}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Icons/delete-icon.png" Height="23" Margin="5 0 0 0"/>
@@ -155,7 +183,10 @@
                 <Button Grid.Row="3"
                         Style="{StaticResource ServiceButton}"
                         VerticalAlignment="Bottom"
-                        Margin="10 5 0 0">
+                        Margin="10 5 0 0"
+                        Command="{Binding DeleteVehicleCommand}"
+                        CommandParameter="{Binding ElementName=LV_Services, Path=SelectedItem}"
+                        IsEnabled="{Binding ElementName=LV_Services, Path=SelectedItem, Converter={StaticResource NotNullToBool}}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Icons/delete-icon.png" Height="23" Margin="5 0 0 0"/>
@@ -165,23 +196,35 @@
                 </Button>
             </Grid>
         </StackPanel>
-        
+
         <!-- Paging -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Style="{StaticResource PagingButton}"
-                    Content="&lt;&lt;"/>
+                    Content="&lt;&lt;"
+                    Command="{Binding FirstPageCommand}"
+                    CommandParameter="1"/>
             <Button Style="{StaticResource PagingButton}"
-                    Content="&lt;"/>
+                    Content="&lt;"
+                    Command="{Binding PreviousPageCommand}"/>
             <TextBox Width="80" Height="23"
-                     Text="1 / 10"
                      TextAlignment="Center"
                      VerticalContentAlignment="Center"
                      Margin="5 10 5 5"
-                     IsHitTestVisible="False"/>
+                     IsHitTestVisible="False">
+                <TextBox.Text>
+                    <MultiBinding StringFormat=" {0} / {1} " >
+                        <Binding Path="CurrentPage"/>
+                        <Binding Path="NumofPages"/>
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
             <Button Style="{StaticResource PagingButton}"
-                    Content="&gt;"/>
+                    Content="&gt;"
+                    Command="{Binding NextPageCommand}"/>
             <Button Style="{StaticResource PagingButton}"
-                    Content="&gt;&gt;"/>
+                    Content="&gt;&gt;"
+                    Command="{Binding LastPageCommand}"
+                    CommandParameter="{Binding NumofPages}"/>
         </StackPanel>
     </Grid>
 </Window>
