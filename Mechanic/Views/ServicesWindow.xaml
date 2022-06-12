@@ -14,6 +14,7 @@
     </Window.DataContext>
     <Window.Resources>
         <converters:NotNullToBoolConverter x:Key="NotNullToBool"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
     </Window.Resources>
     <Grid Style="{StaticResource MainGrid}">
         <Grid.RowDefinitions>
@@ -197,6 +198,14 @@
             </Grid>
         </StackPanel>
 
+        <!-- Loading text -->
+        <TextBlock Grid.Row="1"
+                   Text="Loading..."
+                   VerticalAlignment="Center" HorizontalAlignment="Center"
+                   FontSize="25"
+                   Margin="0 0 150 0"
+                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibility}, Mode=OneWay}"/>
+
         <!-- Paging -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Style="{StaticResource PagingButton}"
@@ -213,8 +222,8 @@
                      IsHitTestVisible="False">
                 <TextBox.Text>
                     <MultiBinding StringFormat=" {0} / {1} " >
-                        <Binding Path="CurrentPage"/>
-                        <Binding Path="NumofPages"/>
+                        <Binding Path="CurrentPage" Mode="OneWay"/>
+                        <Binding Path="NumofPages" Mode="OneWay"/>
                     </MultiBinding>
                 </TextBox.Text>
             </TextBox>

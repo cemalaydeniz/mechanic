@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Mechanic.Models;
 using Mechanic.Commands.ServicesWindow;
-
-using Microsoft.EntityFrameworkCore;
+using Mechanic.Services;
 
 
 namespace Mechanic.ViewModels
 {
     public class ServicesViewModel : ViewModelBase
     {
-        private static readonly int NumofEntryToShow = 50;
+        private static readonly int PageSize = 50;
 
 
         //~ Begin - Search by Vehicle bindings
@@ -28,6 +24,7 @@ namespace Mechanic.ViewModels
             {
                 licensePlate = value;
                 OnPropertyChanged(nameof(LicensePlate));
+                OnSearchServices();
             }
         }
 
@@ -39,6 +36,7 @@ namespace Mechanic.ViewModels
             {
                 make = value;
                 OnPropertyChanged(nameof(Make));
+                OnSearchServices();
             }
         }
 
@@ -50,6 +48,7 @@ namespace Mechanic.ViewModels
             {
                 model = value;
                 OnPropertyChanged(nameof(Model));
+                OnSearchServices();
             }
         }
 
@@ -61,6 +60,7 @@ namespace Mechanic.ViewModels
             {
                 year = value;
                 OnPropertyChanged(nameof(Year));
+                OnSearchServices();
             }
         }
 
@@ -72,6 +72,7 @@ namespace Mechanic.ViewModels
             {
                 color = value;
                 OnPropertyChanged(nameof(Color));
+                OnSearchServices();
             }
         }
         //~ End
@@ -85,12 +86,13 @@ namespace Mechanic.ViewModels
             {
                 customerName = value;
                 OnPropertyChanged(nameof(CustomerName));
+                OnSearchServices();
             }
         }
 
-        // List View binding - TODO: Just to test the view, ObservableList has been converted to List
-        private List<Service>? services;
-        public List<Service>? Services
+        // List View binding
+        private List<Service> services = null!;
+        public List<Service> Services
         {
             get => services;
             set
@@ -100,23 +102,41 @@ namespace Mechanic.ViewModels
             }
         }
 
-        // ~ Begin - Paging binding
-        private int? currentPage;
-        public int? CurrentPage
+        // List View's loading text binding
+        private bool isLoading;
+        public bool IsLoading
         {
-            get => currentPage;
+            get => isLoading;
             set
             {
-                currentPage = value;
+                isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }
+
+        // ~ Begin - Paging binding
+        private int currentPage;
+        public int CurrentPage
+        {
+            get => currentPage;
+            private set
+            {
+                if (NumofPages == 0)
+                {
+                    currentPage = 0;
+                    return;
+                }
+
+                currentPage = Math.Clamp(value, 1, NumofPages);
                 OnPropertyChanged(nameof(CurrentPage));
             }
         }
 
-        private int? numofPages;
-        public int? NumofPages
+        private int numofPages;
+        public int NumofPages
         {
             get => numofPages;
-            set
+            private set
             {
                 numofPages = value;
                 OnPropertyChanged(nameof(NumofPages));
@@ -142,9 +162,14 @@ namespace Mechanic.ViewModels
         public ICommand LastPageCommand { get; }
         //~ End
 
+        // In order to check if a different list should be used for paging, search result or all services
+        private bool isSearching = false;
+
 
         public ServicesViewModel()
         {
+            InitializeServices();
+
             ClearVehicleSearchCommand = new ClearVehicleSearchCommand(this);
             ClearCustomerSearchCommand = new ClearCustomerSearchCommand(this);
 
@@ -160,25 +185,80 @@ namespace Mechanic.ViewModels
             PreviousPageCommand = new ChangePageCommand(this, ChangePageCommand.Direction.Left);
             NextPageCommand = new ChangePageCommand(this, ChangePageCommand.Direction.Right);
             LastPageCommand = new ChangePageCommand(this, ChangePageCommand.Direction.Right);
-
-            // TODO: Just to test the view. It will be removed
-            using (var db = new mechanicContext())
-            {
-                allServices = db.Services.Include(x => x.Vehicle).Include(x => x.Parts).Include(x => x.Vehicle.Customer).OrderBy(x => x.ExitDate).ToList();
-            }
-
-            CurrentPage = 1;
-            NumofPages = (int)Math.Ceiling((decimal)allServices.Count / NumofEntryToShow);
-
-            UpdateListView();
         }
 
-        // TODO: Just to test the view. It will be removed
-        private List<Service> allServices;
-        public void UpdateListView()
+        private async void InitializeServices()
         {
-            List<Service> result = allServices.Skip((CurrentPage.Value - 1) * NumofEntryToShow).Take(NumofEntryToShow).ToList();
-            Services = result;
+            IsLoading = true;
+            Services = await ServiceSingleton.Instance.GetAllServices();
+            IsLoading = false;
+
+            UpdatePage(1);
+            RefreshListView();
+        }
+
+        private void OnSearchServices()
+        {
+            if (ServiceSingleton.Instance.AllServices == null)
+                return;
+
+            isSearching = ServiceSingleton.Instance.SearchServices(x => (string.IsNullOrEmpty(LicensePlate) || x.Vehicle.LicensePlate.Contains(LicensePlate, StringComparison.InvariantCultureIgnoreCase)) &&
+                                                                        (string.IsNullOrEmpty(Make) || x.Vehicle.Make.Contains(Make, StringComparison.InvariantCultureIgnoreCase)) &&
+                                                                        (string.IsNullOrEmpty(Model) || x.Vehicle.Model.Contains(Model, StringComparison.InvariantCultureIgnoreCase)) &&
+                                                                        (!Year.HasValue || x.Vehicle.Year == Year) &&
+                                                                        (string.IsNullOrEmpty(Color) || x.Vehicle.Color.Contains(Color, StringComparison.InvariantCultureIgnoreCase)) &&
+                                                                        (string.IsNullOrEmpty(CustomerName) || (x.Vehicle.Customer != null && x.Vehicle.Customer.Name.Contains(CustomerName, StringComparison.InvariantCultureIgnoreCase))));
+
+            UpdatePage(1);
+            RefreshListView();
+        }
+
+        public void RefreshListView()
+        {
+            if (isSearching)
+            {
+                if (ServiceSingleton.Instance.LastSearchResult == null)
+                    return;
+
+                Services = ServiceSingleton.Instance.LastSearchResult.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            }
+            else
+            {
+                if (ServiceSingleton.Instance.AllServices == null)
+                    return;
+
+                Services = ServiceSingleton.Instance.AllServices.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            }
+        }
+
+        public void UpdatePage(int pageNumber)
+        {
+            if (isSearching)
+            {
+                if (ServiceSingleton.Instance.LastSearchResult == null)
+                {
+                    NumofPages = 0;
+                    CurrentPage = 0;
+                }
+                else
+                {
+                    NumofPages = (int)Math.Ceiling((decimal)ServiceSingleton.Instance.LastSearchResult.Count / PageSize);
+                    CurrentPage = pageNumber;
+                }
+            }
+            else
+            {
+                if (ServiceSingleton.Instance.AllServices == null)
+                {
+                    NumofPages = 0;
+                    CurrentPage = 0;
+                }
+                else
+                {
+                    NumofPages = (int)Math.Ceiling((decimal)ServiceSingleton.Instance.AllServices.Count / PageSize);
+                    CurrentPage = pageNumber;
+                }
+            }
         }
     }
 }

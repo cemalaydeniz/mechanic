@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Mechanic.ViewModels;
 
@@ -49,27 +45,26 @@ namespace Mechanic.Commands.ServicesWindow
         public override void Execute(object? parameter)
         {
             // Check if a specific page number is sent in order to jump to a page number (e.g. first or last)
-            if (parameter is not null && Int32.TryParse(parameter.ToString(), out int pageNumber))
+            if (parameter is not null && int.TryParse(parameter.ToString(), out int pageNumber))
             {
-                viewModel.CurrentPage = pageNumber;
+                viewModel.UpdatePage(pageNumber);
             }
             else
             {
                 switch (direction)
                 {
                     case Direction.Left:
-                        viewModel.CurrentPage--;
+                        viewModel.UpdatePage(viewModel.CurrentPage - 1);
                         break;
                     case Direction.Right:
-                        viewModel.CurrentPage++;
+                        viewModel.UpdatePage(viewModel.CurrentPage + 1);
                         break;
                     default:
                         return;
                 }
             }
-            
-            // TODO: Just to test the logic. It will be removed
-            viewModel.UpdateListView();
+
+            viewModel.RefreshListView();
         }
 
 
