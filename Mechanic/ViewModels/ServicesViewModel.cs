@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 
 using Mechanic.Models;
-using Mechanic.Commands.ServicesWindow;
+using Mechanic.Commands.Services;
 using Mechanic.Services;
 
 
