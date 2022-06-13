@@ -204,7 +204,7 @@
                    VerticalAlignment="Center" HorizontalAlignment="Center"
                    FontSize="25"
                    Margin="0 0 150 0"
-                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibility}, Mode=OneWay}"/>
+                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibility}}"/>
 
         <!-- Paging -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
