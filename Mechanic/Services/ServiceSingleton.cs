@@ -30,6 +30,7 @@ namespace Mechanic.Services
         /// All the services that are cached in the memory
         /// </summary>
         public List<Service>? AllServices { get; private set; }
+        public List<Vehicle>? AllVehicles { get; private set; }
 
         /// <summary>
         /// The last search result executed by 'SearchService' method
@@ -68,6 +69,20 @@ namespace Mechanic.Services
             LastSearchResult = AllServices.Where(query).ToList();
 
             return LastSearchResult.Count != AllServices.Count;
+        }
+
+        /// <summary>
+        /// Get the vehicle data. It uses 'AllServices', so that all the services must be saved first to call this method
+        /// </summary>
+        /// <param name="licensePlate">The license plate of the vehicle</param>
+        /// <returns>Returns the related vehicle data if exists. If not, it returns null</returns>
+        public Vehicle? GetVehicle(string licensePlate)
+        {
+            Service? service = AllServices?.FirstOrDefault(x => x.Vehicle.LicensePlate == licensePlate);
+            if (service == null)
+                return null;
+
+            return service.Vehicle;
         }
     }
 }

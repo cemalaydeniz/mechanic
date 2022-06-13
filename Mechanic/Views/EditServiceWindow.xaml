@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mechanic.Views"
         xmlns:vm="clr-namespace:Mechanic.ViewModels"
+        xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
         mc:Ignorable="d"
-        Title="EditServiceWindow" Height="635" Width="650">
+        Title="EditServiceWindow" Height="635" Width="650"
+        WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <vm:EditServiceViewModel/>
     </Window.DataContext>
@@ -31,7 +33,8 @@
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="License Plate"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
-                             MaxLength="15"/>
+                             MaxLength="15"
+                             Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal"
@@ -39,22 +42,26 @@
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Make"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
-                             MaxLength="50"/>
+                             MaxLength="50"
+                             Text="{Binding Make, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Model"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
-                             MaxLength="50"/>
+                             MaxLength="50"
+                             Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Year"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
-                             MaxLength="4"/>
+                             MaxLength="4"
+                             Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Color"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
-                             MaxLength="30"/>
+                             MaxLength="30"
+                             Text="{Binding Color, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -82,7 +89,8 @@
                          Height="23"
                          VerticalContentAlignment="Center"
                          Margin="10 0 7 10"
-                         MaxLength="70"/>
+                         MaxLength="70"
+                         Text="{Binding CustomerName}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0"
                            Style="{StaticResource InputFieldName}"
@@ -96,7 +104,8 @@
                          Margin="10 0 7 5"
                          TextWrapping="Wrap" AcceptsReturn="True"
                          VerticalScrollBarVisibility="Auto"
-                         MaxLength="255"/>
+                         MaxLength="255"
+                         Text="{Binding CustomerContact}"/>
             </Grid>
         </GroupBox>
         
@@ -128,7 +137,8 @@
                          Margin="10 0 7 10"
                          TextWrapping="Wrap" AcceptsReturn="True"
                          VerticalScrollBarVisibility="Visible"
-                         MaxLength="65535"/>
+                         MaxLength="65535"
+                         Text="{Binding ServiceDetails}"/>
                 
                 <!-- Parts -->
                 <TextBlock Grid.Row="1" Grid.Column="0"
@@ -144,7 +154,8 @@
                     <ScrollViewer>
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top"
                                     Margin="5 5 5 5">
-                            <ItemsControl>
+                            <ItemsControl x:Name="IC_Parts"
+                                          ItemsSource="{Binding Parts}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal"
@@ -153,23 +164,28 @@
                                                        Text="Name"
                                                        HorizontalAlignment="Left"/>
                                             <TextBox Style="{StaticResource OneLineInputField}"
-                                                     MaxLength="50"/>
+                                                     MaxLength="50"
+                                                     Text="{Binding Name}"/>
 
                                             <TextBlock Style="{StaticResource InputFieldName}"
                                                        Text="Number Used"
                                                        HorizontalAlignment="Left"/>
                                             <TextBox Style="{StaticResource OneLineInputField}"
                                                      Width="70" Height="23"
-                                                     MaxLength="5"/>
+                                                     MaxLength="5"
+                                                     Text="{Binding NumberUsed}"/>
 
                                             <TextBlock Style="{StaticResource InputFieldName}"
                                                        Text="Price"
                                                        HorizontalAlignment="Left"/>
                                             <TextBox Style="{StaticResource OneLineInputField}"
-                                                     MaxLength="17"/>
+                                                     MaxLength="17"
+                                                     Text="{Binding Price}"/>
 
                                             <Button Width="23" Height="23"
-                                                    Content="X"/>
+                                                    Content="X"
+                                                    Command="{Binding ElementName=IC_Parts, Path=DataContext.RemovePartCommand}"
+                                                    CommandParameter="{Binding ID}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -177,7 +193,8 @@
 
                             <Button Style="{StaticResource ClassicButton}"
                                     Content="Add"
-                                    HorizontalAlignment="Right"/>
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding AddPartCommand}"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
@@ -193,15 +210,18 @@
                             Orientation="Horizontal"
                             Margin="10 0 10 10">
                     <DatePicker VerticalAlignment="Center"
-                                Margin="0 0 10 0"/>
+                                Margin="0 0 10 0"
+                                Text="{Binding EnterDate}"/>
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Exit Date"/>
                     <DatePicker VerticalAlignment="Center"
                                 Margin="10 0 10 0"
-                                IsEnabled="{Binding ElementName=Cbx_Finished, Path=IsChecked}"/>
+                                IsEnabled="{Binding ElementName=Cbx_Finished, Path=IsChecked}"
+                                Text="{Binding ExitDate}"/>
                     <CheckBox x:Name="Cbx_Finished"
                               VerticalAlignment="Center"
-                              Content="Finished"/>
+                              Content="Finished"
+                              IsChecked="{Binding IsFinished}"/>
                 </StackPanel>
                 
                 <!-- Fee -->
@@ -214,14 +234,16 @@
                          Style="{StaticResource OneLineInputField}"
                          HorizontalAlignment="Left"
                          MaxLength="17"
-                         Margin="10 0 0 5"/>
+                         Margin="10 0 0 5"
+                         Text="{Binding ServiceFee, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
         </GroupBox>
 
         <Button Grid.Row="3"
                 HorizontalAlignment="Right"
                 Margin="0 7 0 0"
-                Padding="5 5 15 5">
+                Padding="5 5 15 5"
+                Command="{Binding SaveServiceCommand}">
             <Button.Content>
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Icons/save-icon.png" Height="23" Margin="5 0 0 0"/>
