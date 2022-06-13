@@ -50,7 +50,7 @@ namespace Mechanic.Services
 
             using (var db = new mechanicContext())
             {
-                AllServices = await db.Services.Include(x => x.Parts).Include(x => x.Vehicle).Include(x => x.Vehicle.Customer).ToListAsync();
+                AllServices = await db.Services.Include(x => x.Parts).Include(x => x.Vehicle).Include(x => x.Vehicle.Customer).OrderBy(x => x.ExitDate).ToListAsync();
             }
 
             return AllServices;
