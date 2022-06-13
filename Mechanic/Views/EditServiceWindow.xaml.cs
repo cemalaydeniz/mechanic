@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using Mechanic.ViewModels;
+
+
 namespace Mechanic.Views
 {
     /// <summary>
@@ -19,9 +22,20 @@ namespace Mechanic.Views
     /// </summary>
     public partial class EditServiceWindow : Window
     {
-        public EditServiceWindow()
+        private EditServiceViewModel viewModel = null!;
+
+
+        public EditServiceWindow(bool isReadOnly)
         {
             InitializeComponent();
+            Initialize(isReadOnly);
+        }
+
+        private void Initialize(bool isReadOnly)
+        {
+            viewModel = (EditServiceViewModel)DataContext;
+
+            viewModel.IsReadOnly = isReadOnly;
         }
     }
 }

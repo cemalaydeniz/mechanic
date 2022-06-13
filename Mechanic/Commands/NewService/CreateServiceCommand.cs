@@ -47,7 +47,7 @@ namespace Mechanic.Commands.NewService
                 return;
 
             // Create a Edit Service Window and fill the form if the vehicle already exists
-            EditServiceWindow editWindow = new EditServiceWindow();
+            EditServiceWindow editWindow = new EditServiceWindow(false);
             editWindow.Owner = Application.Current.MainWindow;
             ((EditServiceViewModel)editWindow.DataContext).FillForm(licensePlate);
             editWindow.Show();

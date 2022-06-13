@@ -21,7 +21,7 @@ namespace Mechanic.Commands.Services
                 return;
 
             // Create a Edit Service Window and fill the form if the service exists
-            EditServiceWindow editWindow = new EditServiceWindow();
+            EditServiceWindow editWindow = new EditServiceWindow(true);
             editWindow.Owner = Application.Current.MainWindow;
             ((EditServiceViewModel)editWindow.DataContext).FillForm(service);
             editWindow.Show();

@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
+
+using Mechanic.Models;
+using Mechanic.Views;
+using Mechanic.ViewModels;
+
 
 namespace Mechanic.Commands.Services
 {
@@ -10,7 +11,14 @@ namespace Mechanic.Commands.Services
     {
         public override void Execute(object? parameter)
         {
-            // TODO: Will be implemented after Edit Service window's viewmodel is completed
+            if (parameter is not Service)
+                return;
+
+            // Create a Edit Service Window and fill the form if the service exists
+            EditServiceWindow editWindow = new EditServiceWindow(false);
+            editWindow.Owner = Application.Current.MainWindow;
+            ((EditServiceViewModel)editWindow.DataContext).FillForm((Service)parameter);
+            editWindow.Show();
         }
     }
 }

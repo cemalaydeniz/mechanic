@@ -195,7 +195,8 @@ namespace Mechanic.ViewModels
         }
 
         /// <summary>
-        /// Fills the text fields if a vehicle with the license place exists
+        /// Fills the text fields if a vehicle with the license place exists.
+        /// This doesn't fill any service data
         /// </summary>
         /// <param name="licensePlate">The license plate of the vehicle</param>
         public void FillForm(string licensePlate)
@@ -218,7 +219,7 @@ namespace Mechanic.ViewModels
         }
 
         /// <summary>
-        /// Fills the text fields as read-only
+        /// Fills the text fields including the service data
         /// </summary>
         /// <param name="service">The service data to fill the form</param>
         public void FillForm(Service service)
@@ -255,8 +256,6 @@ namespace Mechanic.ViewModels
                 Parts.Add(PartViewModel.Converter(nextIDPart, part));
                 nextIDPart++;
             }
-
-            IsReadOnly = true;
         }
 
         /// <summary>
