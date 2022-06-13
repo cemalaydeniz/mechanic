@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mechanic.Views"
+        xmlns:vm="clr-namespace:Mechanic.ViewModels"
         mc:Ignorable="d"
         Title="EditServiceWindow" Height="635" Width="650">
+    <Window.DataContext>
+        <vm:EditServiceViewModel/>
+    </Window.DataContext>
     <Grid Style="{StaticResource MainGrid}" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
