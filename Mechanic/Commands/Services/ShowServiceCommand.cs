@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mechanic.Commands.ServicesWindow
+namespace Mechanic.Commands.Services
 {
-    public class DeleteServiceCommand : CommandBase
+    public class ShowServiceCommand : CommandBase
     {
         public override void Execute(object? parameter)
         {
-            // TODO: Will be implemented after Services are implemented
+            // TODO: Will be implemented after Edit Service window's viewmodel is completed
         }
     }
 }

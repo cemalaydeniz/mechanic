@@ -1,10 +1,9 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 using Mechanic.ViewModels;
 
 
-namespace Mechanic.Commands.ServicesWindow
+namespace Mechanic.Commands.Services
 {
     public class ChangePageCommand : CommandBase
     {

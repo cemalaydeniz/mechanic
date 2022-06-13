@@ -3,7 +3,7 @@
 using Mechanic.ViewModels;
 
 
-namespace Mechanic.Commands.ServicesWindow
+namespace Mechanic.Commands.Services
 {
     public class ClearCustomerSearchCommand : CommandBase
     {
