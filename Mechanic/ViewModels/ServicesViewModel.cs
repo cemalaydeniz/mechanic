@@ -213,6 +213,9 @@ namespace Mechanic.ViewModels
             RefreshListView();
         }
 
+        /// <summary>
+        /// Refreshes the list view. Call it when the current page changes
+        /// </summary>
         public void RefreshListView()
         {
             if (isSearching)
@@ -231,6 +234,10 @@ namespace Mechanic.ViewModels
             }
         }
 
+        /// <summary>
+        /// Updates the current page number
+        /// </summary>
+        /// <param name="pageNumber">The new page</param>
         public void UpdatePage(int pageNumber)
         {
             if (isSearching)
