@@ -203,10 +203,10 @@ namespace Mechanic.ViewModels
                 return;
 
             isSearching = ServiceSingleton.Instance.SearchServices(x => (string.IsNullOrEmpty(LicensePlate) || x.Vehicle.LicensePlate.Contains(LicensePlate, StringComparison.InvariantCultureIgnoreCase)) &&
-                                                                        (string.IsNullOrEmpty(Make) || x.Vehicle.Make.Contains(Make, StringComparison.InvariantCultureIgnoreCase)) &&
-                                                                        (string.IsNullOrEmpty(Model) || x.Vehicle.Model.Contains(Model, StringComparison.InvariantCultureIgnoreCase)) &&
+                                                                        (string.IsNullOrEmpty(Make) || x.Vehicle.Make.StartsWith(Make, StringComparison.InvariantCultureIgnoreCase)) &&
+                                                                        (string.IsNullOrEmpty(Model) || x.Vehicle.Model.StartsWith(Model, StringComparison.InvariantCultureIgnoreCase)) &&
                                                                         (!Year.HasValue || x.Vehicle.Year == Year) &&
-                                                                        (string.IsNullOrEmpty(Color) || x.Vehicle.Color.Contains(Color, StringComparison.InvariantCultureIgnoreCase)) &&
+                                                                        (string.IsNullOrEmpty(Color) || x.Vehicle.Color.StartsWith(Color, StringComparison.InvariantCultureIgnoreCase)) &&
                                                                         (string.IsNullOrEmpty(CustomerName) || (x.Vehicle.Customer != null && x.Vehicle.Customer.Name.Contains(CustomerName, StringComparison.InvariantCultureIgnoreCase))));
 
             UpdatePage(1);
