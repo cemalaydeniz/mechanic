@@ -31,7 +31,8 @@ namespace Mechanic.Commands.EditService
                 e.PropertyName == nameof(viewModel.Model) ||
                 e.PropertyName == nameof(viewModel.Year) ||
                 e.PropertyName == nameof(viewModel.Color) ||
-                e.PropertyName == nameof(viewModel.ServiceFee))
+                e.PropertyName == nameof(viewModel.ServiceFee) ||
+                e.PropertyName == nameof(viewModel.IsReadOnly))
             {
                 OnCanExecuteChanged();
             }
@@ -44,7 +45,8 @@ namespace Mechanic.Commands.EditService
                 !string.IsNullOrEmpty(viewModel.Model) &&
                 viewModel.Year > 0 &&
                 !string.IsNullOrEmpty(viewModel.Color) &&
-                !string.IsNullOrEmpty(viewModel.ServiceFee) && moneyRegex.IsMatch(viewModel.ServiceFee);
+                !string.IsNullOrEmpty(viewModel.ServiceFee) && moneyRegex.IsMatch(viewModel.ServiceFee) &&
+                !viewModel.IsReadOnly;
         }
 
         public override void Execute(object? parameter)

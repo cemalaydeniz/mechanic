@@ -5,13 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mechanic.Views"
         xmlns:vm="clr-namespace:Mechanic.ViewModels"
-        xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+        xmlns:converters="clr-namespace:Mechanic.Converters"
         mc:Ignorable="d"
         Title="EditServiceWindow" Height="635" Width="650"
         WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <vm:EditServiceViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+        <converters:ReverseBoolConverter x:Key="ReverseBool"/>
+        <converters:ExitDateEnableConverter x:Key="ExitDateEnable"/>
+    </Window.Resources>
     <Grid Style="{StaticResource MainGrid}" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -34,7 +39,8 @@
                                Text="License Plate"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
                              MaxLength="15"
-                             Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal"
@@ -43,25 +49,29 @@
                                Text="Make"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
                              MaxLength="50"
-                             Text="{Binding Make, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding Make, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
 
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Model"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
                              MaxLength="50"
-                             Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
 
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Year"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
                              MaxLength="4"
-                             Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
 
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Color"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
                              MaxLength="30"
-                             Text="{Binding Color, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding Color, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -90,7 +100,8 @@
                          VerticalContentAlignment="Center"
                          Margin="10 0 7 10"
                          MaxLength="70"
-                         Text="{Binding CustomerName}"/>
+                         Text="{Binding CustomerName}"
+                         IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0"
                            Style="{StaticResource InputFieldName}"
@@ -105,7 +116,8 @@
                          TextWrapping="Wrap" AcceptsReturn="True"
                          VerticalScrollBarVisibility="Auto"
                          MaxLength="255"
-                         Text="{Binding CustomerContact}"/>
+                         Text="{Binding CustomerContact}"
+                         IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
             </Grid>
         </GroupBox>
         
@@ -138,7 +150,8 @@
                          TextWrapping="Wrap" AcceptsReturn="True"
                          VerticalScrollBarVisibility="Visible"
                          MaxLength="65535"
-                         Text="{Binding ServiceDetails}"/>
+                         Text="{Binding ServiceDetails}"
+                         IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
                 
                 <!-- Parts -->
                 <TextBlock Grid.Row="1" Grid.Column="0"
@@ -155,7 +168,7 @@
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top"
                                     Margin="5 5 5 5">
                             <ItemsControl x:Name="IC_Parts"
-                                          ItemsSource="{Binding Parts}">
+                                          ItemsSource="{Binding Parts, Mode=OneWay}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal"
@@ -165,7 +178,8 @@
                                                        HorizontalAlignment="Left"/>
                                             <TextBox Style="{StaticResource OneLineInputField}"
                                                      MaxLength="50"
-                                                     Text="{Binding Name}"/>
+                                                     Text="{Binding Name}"
+                                                     IsEnabled="{Binding Path=DataContext.IsReadOnly, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource ReverseBool}}"/>
 
                                             <TextBlock Style="{StaticResource InputFieldName}"
                                                        Text="Number Used"
@@ -173,14 +187,16 @@
                                             <TextBox Style="{StaticResource OneLineInputField}"
                                                      Width="70" Height="23"
                                                      MaxLength="5"
-                                                     Text="{Binding NumberUsed}"/>
+                                                     Text="{Binding NumberUsed}"
+                                                     IsEnabled="{Binding Path=DataContext.IsReadOnly, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource ReverseBool}}"/>
 
                                             <TextBlock Style="{StaticResource InputFieldName}"
                                                        Text="Price"
                                                        HorizontalAlignment="Left"/>
                                             <TextBox Style="{StaticResource OneLineInputField}"
                                                      MaxLength="17"
-                                                     Text="{Binding Price}"/>
+                                                     Text="{Binding Price}"
+                                                     IsEnabled="{Binding Path=DataContext.IsReadOnly, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource ReverseBool}}"/>
 
                                             <Button Width="23" Height="23"
                                                     Content="X"
@@ -211,17 +227,25 @@
                             Margin="10 0 10 10">
                     <DatePicker VerticalAlignment="Center"
                                 Margin="0 0 10 0"
-                                Text="{Binding EnterDate}"/>
+                                Text="{Binding EnterDate}"
+                                IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Exit Date"/>
                     <DatePicker VerticalAlignment="Center"
                                 Margin="10 0 10 0"
-                                IsEnabled="{Binding ElementName=Cbx_Finished, Path=IsChecked}"
-                                Text="{Binding ExitDate}"/>
+                                Text="{Binding ExitDate}">
+                        <DatePicker.IsEnabled>
+                            <MultiBinding Converter="{StaticResource ExitDateEnable}">
+                                <Binding ElementName="Cbx_Finished" Path="IsChecked"/>
+                                <Binding Path="IsReadOnly" Converter="{StaticResource ReverseBool}"/>
+                            </MultiBinding>
+                        </DatePicker.IsEnabled>
+                    </DatePicker>
                     <CheckBox x:Name="Cbx_Finished"
                               VerticalAlignment="Center"
                               Content="Finished"
-                              IsChecked="{Binding IsFinished}"/>
+                              IsChecked="{Binding IsFinished}"
+                              IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
                 </StackPanel>
                 
                 <!-- Fee -->
@@ -235,10 +259,27 @@
                          HorizontalAlignment="Left"
                          MaxLength="17"
                          Margin="10 0 0 5"
-                         Text="{Binding ServiceFee, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding ServiceFee, UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
             </Grid>
         </GroupBox>
 
+        <!-- Edit button - It appears in read-only mode -->
+        <Button Grid.Row="3"
+                HorizontalAlignment="Left"
+                Margin="0 7 0 0"
+                Padding="5 5 15 5"
+                Command="{Binding EditServiceCommand}"
+                Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVisibility}}">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Icons/edit-icon.png" Height="23" Margin="5 0 0 0"/>
+                    <TextBlock Text="Edit" VerticalAlignment="Center" Margin="7 0 0 0"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
+
+        <!-- Save button -->
         <Button Grid.Row="3"
                 HorizontalAlignment="Right"
                 Margin="0 7 0 0"

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Mechanic.Services;
 using Mechanic.Models;
 using Mechanic.Commands.EditService;
 using Mechanic.ViewModels.Helpers;
-using System.Collections.ObjectModel;
+
 
 namespace Mechanic.ViewModels
 {
@@ -112,7 +110,7 @@ namespace Mechanic.ViewModels
         public ObservableCollection<PartViewModel> Parts
         {
             get => parts;
-            set
+            private set
             {
                 parts = value;
                 OnPropertyChanged(nameof(Parts));
@@ -164,10 +162,22 @@ namespace Mechanic.ViewModels
         }
         //~ End
 
+        private bool isReadOnly;
+        public bool IsReadOnly
+        {
+            get => isReadOnly;
+            set
+            {
+                isReadOnly = value;
+                OnPropertyChanged(nameof(IsReadOnly));
+            }
+        }
+
         //~ Begin - Button bindings
         public ICommand AddPartCommand { get; }
         public ICommand RemovePartCommand { get; }
 
+        public ICommand EditServiceCommand { get; }
         public ICommand SaveServiceCommand { get; }
         //~ End
 
@@ -180,6 +190,7 @@ namespace Mechanic.ViewModels
             AddPartCommand = new AddPartCommand(this);
             RemovePartCommand = new RemovePartCommand(this);
 
+            EditServiceCommand = new EditServiceCommand(this);
             SaveServiceCommand = new SaveServiceCommand(this);
         }
 
@@ -204,6 +215,48 @@ namespace Mechanic.ViewModels
 
             CustomerName = vehicle.Customer?.Name;
             CustomerContact = vehicle.Customer?.Contact;
+        }
+
+        /// <summary>
+        /// Fills the text fields as read-only
+        /// </summary>
+        /// <param name="service">The service data to fill the form</param>
+        public void FillForm(Service service)
+        {
+            if (service == null)
+                return;
+
+            LicensePlate = service.Vehicle.LicensePlate;
+            Make = service.Vehicle.Make;
+            Model = service.Vehicle.Model;
+            Year = service.Vehicle.Year;
+            Color = service.Vehicle.Color;
+
+            CustomerName = service.Vehicle.Customer?.Name;
+            CustomerContact = service.Vehicle.Customer?.Contact;
+
+            ServiceDetails = service.Details;
+            ServiceFee = service.Fee.ToString("0.00");
+            EnterDate = service.EnterDate.ToDateTime(TimeOnly.MinValue);
+            
+            if (service.ExitDate == null)
+            {
+                ExitDate = null;
+                IsFinished = false;
+            }
+            else
+            {
+                ExitDate = service.ExitDate.Value.ToDateTime(TimeOnly.MinValue);
+                IsFinished = true;
+            }
+
+            foreach (var part in service.Parts)
+            {
+                Parts.Add(PartViewModel.Converter(nextIDPart, part));
+                nextIDPart++;
+            }
+
+            IsReadOnly = true;
         }
 
         /// <summary>
