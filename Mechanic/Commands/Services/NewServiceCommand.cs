@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
+
+using Mechanic.Views;
+
 
 namespace Mechanic.Commands.Services
 {
@@ -10,7 +9,9 @@ namespace Mechanic.Commands.Services
     {
         public override void Execute(object? parameter)
         {
-            // TODO: Will be implemented after New Service window's viewmodel is completed
+            NewServiceWindow window = new NewServiceWindow();
+            window.Owner = Application.Current.MainWindow;
+            window.ShowDialog();
         }
     }
 }
