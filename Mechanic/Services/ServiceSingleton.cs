@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -72,6 +71,26 @@ namespace Mechanic.Services
         }
 
         /// <summary>
+        /// Deletes a service from the database
+        /// </summary>
+        /// <param name="id">ID of the service to delete</param>
+        /// <returns>True if the service is deleted successfully</returns>
+        public void DeleteService(int id)
+        {
+            using (var db = new mechanicContext())
+            {
+                Service? service = db.Services.Include(x => x.Parts).FirstOrDefault(x => x.Id == id);
+                if (service != null)
+                {
+                    db.Services.Remove(service);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+
+
+        /// <summary>
         /// Get the vehicle data. It uses 'AllServices', so that all the services must be saved first to call this method
         /// </summary>
         /// <param name="licensePlate">The license plate of the vehicle</param>
@@ -83,6 +102,33 @@ namespace Mechanic.Services
                 return null;
 
             return service.Vehicle;
+        }
+
+        /// <summary>
+        /// Deletes a vehicle and its related services and part data, and its customer data if the customer has no more vehicle
+        /// </summary>
+        /// <param name="id">The ID of the vehicle to delete</param>
+        public void DeleteVehicle(int id)
+        {
+            using (var db = new mechanicContext())
+            {
+                Vehicle? vehicle = db.Vehicles.Include(x => x.Services).ThenInclude(x => x.Parts).Where(x => x.Id == id).FirstOrDefault();
+                if (vehicle != null)
+                {
+                    db.Vehicles.Remove(vehicle);
+
+                    if (vehicle.CustomerId != null)
+                    {
+                        Customer? customer = db.Customers.Include(x => x.Vehicles).Where(x => x.Id == vehicle.CustomerId).FirstOrDefault();
+                        if (customer != null && customer.Vehicles.Count == 1)
+                        {
+                            db.Customers.Remove(customer);
+                        }
+                    }
+
+                    db.SaveChanges();
+                }
+            }
         }
     }
 }

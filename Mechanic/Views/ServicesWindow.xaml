@@ -15,6 +15,7 @@
     <Window.Resources>
         <converters:NotNullToBoolConverter x:Key="NotNullToBool"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+        <converters:MultiCommandParamsConverter x:Key="MultiCommandParams"/>
     </Window.Resources>
     <Grid Style="{StaticResource MainGrid}">
         <Grid.RowDefinitions>
@@ -171,8 +172,13 @@
                         Style="{StaticResource ServiceButton}"
                         Margin="10 5 0 5"
                         Command="{Binding DeleteServiceCommand}"
-                        CommandParameter="{Binding ElementName=LV_Services, Path=SelectedItem}"
                         IsEnabled="{Binding ElementName=LV_Services, Path=SelectedItem, Converter={StaticResource NotNullToBool}}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiCommandParams}">
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
+                            <Binding ElementName="LV_Services" Path="SelectedItem"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Icons/delete-icon.png" Height="23" Margin="5 0 0 0"/>
@@ -186,8 +192,13 @@
                         VerticalAlignment="Bottom"
                         Margin="10 5 0 0"
                         Command="{Binding DeleteVehicleCommand}"
-                        CommandParameter="{Binding ElementName=LV_Services, Path=SelectedItem}"
                         IsEnabled="{Binding ElementName=LV_Services, Path=SelectedItem, Converter={StaticResource NotNullToBool}}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiCommandParams}">
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
+                            <Binding ElementName="LV_Services" Path="SelectedItem"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Icons/delete-icon.png" Height="23" Margin="5 0 0 0"/>
