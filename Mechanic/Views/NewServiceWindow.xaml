@@ -13,7 +13,7 @@
         <vm:NewServiceViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <converters:CreateServiceParamConverter x:Key="CreateServiceParam"/>
+        <converters:MultiCommandParamsConverter x:Key="MultiCommandParams"/>
     </Window.Resources>
     <Grid Style="{StaticResource MainGrid}">
         <Grid.RowDefinitions>
@@ -34,7 +34,7 @@
                 Content="Create Service"
                 Command="{Binding CreateServiceCommand}">
             <Button.CommandParameter>
-                <MultiBinding Converter="{StaticResource CreateServiceParam}">
+                <MultiBinding Converter="{StaticResource MultiCommandParams}">
                     <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
                     <Binding Path="LicensePlate"/>
                 </MultiBinding>
