@@ -35,16 +35,9 @@ namespace Mechanic.Commands.Services
                 // Delete from the database
                 ServiceSingleton.Instance.DeleteVehicle(service.Vehicle.Id);
 
-                // Delete from the memory
-                ServiceSingleton.Instance.AllServices?.RemoveAll(x => x.Vehicle.Id == service.Vehicle.Id);
-                ServiceSingleton.Instance.LastSearchResult?.RemoveAll(x => x.Vehicle.Id == service.Vehicle.Id);
-
-                service.Vehicle.Customer?.Vehicles.Remove(service.Vehicle);
-
                 // After the deletion, the current page might not be available. So, try to give the same value again to clamp
                 ServicesViewModel viewModel = (ServicesViewModel)servicesWindow.DataContext;
                 viewModel.UpdatePage(viewModel.CurrentPage);
-                viewModel.RefreshListView();
             }
         }
     }

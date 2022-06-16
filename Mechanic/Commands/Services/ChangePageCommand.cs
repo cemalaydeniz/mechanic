@@ -62,8 +62,6 @@ namespace Mechanic.Commands.Services
                         return;
                 }
             }
-
-            viewModel.RefreshListView();
         }
 
 

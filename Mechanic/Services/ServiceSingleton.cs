@@ -26,10 +26,9 @@ namespace Mechanic.Services
         }
 
         /// <summary>
-        /// All the services that are cached in the memory
+        /// The last cached of the services
         /// </summary>
         public List<Service>? AllServices { get; private set; }
-        public List<Vehicle>? AllVehicles { get; private set; }
 
         /// <summary>
         /// The last search result executed by 'SearchService' method
@@ -38,18 +37,28 @@ namespace Mechanic.Services
 
 
         /// <summary>
-        /// Get all the services. In the first call, the method gets all the services from DB and saves the result
-        /// in 'AllServices' variable. The next calls will not connect to DB, but return the cached result
+        /// Get all the services asynchronously
         /// </summary>
         /// <returns>All services</returns>
-        public async Task<List<Service>> GetAllServices()
+        public async Task<List<Service>> GetAllServicesAsync()
         {
-            if (AllServices != null)
-                return AllServices;
-
             using (var db = new mechanicContext())
             {
-                AllServices = await db.Services.Include(x => x.Parts).Include(x => x.Vehicle).Include(x => x.Vehicle.Customer).OrderBy(x => x.ExitDate).ToListAsync();
+                AllServices = await db.Services.Include(x => x.Parts).Include(x => x.Vehicle).Include(x => x.Vehicle.Customer).OrderByDescending(x => x.ExitDate ?? DateOnly.FromDateTime(DateTime.MaxValue)).ThenByDescending(x => x.EnterDate).ToListAsync();
+            }
+
+            return AllServices;
+        }
+
+        /// <summary>
+        /// Get all the services
+        /// </summary>
+        /// <returns>All services</returns>
+        public List<Service> GetAllServices()
+        {
+            using (var db = new mechanicContext())
+            {
+                AllServices = db.Services.Include(x => x.Parts).Include(x => x.Vehicle).Include(x => x.Vehicle.Customer).OrderByDescending(x => x.ExitDate ?? DateOnly.FromDateTime(DateTime.MaxValue)).ThenByDescending(x => x.EnterDate).ToList();
             }
 
             return AllServices;
@@ -71,10 +80,35 @@ namespace Mechanic.Services
         }
 
         /// <summary>
+        /// Adds a new service to the database
+        /// </summary>
+        /// <param name="data">Service data to add</param>
+        public void AddService(Service data)
+        {
+            using (var db = new mechanicContext())
+            {
+                db.Services.Add(data);
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Updates a service on the database
+        /// </summary>
+        /// <param name="data">New service data to update</param>
+        public void UpdateService(Service data)
+        {
+            using (var db = new mechanicContext())
+            {
+                db.Entry(data).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
         /// Deletes a service from the database
         /// </summary>
         /// <param name="id">ID of the service to delete</param>
-        /// <returns>True if the service is deleted successfully</returns>
         public void DeleteService(int id)
         {
             using (var db = new mechanicContext())
@@ -105,6 +139,32 @@ namespace Mechanic.Services
         }
 
         /// <summary>
+        /// Adds a new vehicle to the database
+        /// </summary>
+        /// <param name="data">Vehicle data to add</param>
+        public void AddVehicle(Vehicle data)
+        {
+            using (var db = new mechanicContext())
+            {
+                db.Vehicles.Add(data);
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Updates a vehicle on the database
+        /// </summary>
+        /// <param name="data">New vehicle data to update</param>
+        public void UpdatesVehicle(Vehicle data)
+        {
+            using (var db = new mechanicContext())
+            {
+                db.Entry(data).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
         /// Deletes a vehicle and its related services and part data, and its customer data if the customer has no more vehicle
         /// </summary>
         /// <param name="id">The ID of the vehicle to delete</param>
@@ -126,6 +186,51 @@ namespace Mechanic.Services
                         }
                     }
 
+                    db.SaveChanges();
+                }
+            }
+        }
+
+
+
+        /// <summary>
+        /// Adds a new customer to the database
+        /// </summary>
+        /// <param name="data">Customer data to add</param>
+        public void AddCustomer(Customer data)
+        {
+            using (var db = new mechanicContext())
+            {
+                db.Customers.Add(data);
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Updates a customer on the database
+        /// </summary>
+        /// <param name="data">Customer data to update</param>
+        public void UpdateCustomer(Customer data)
+        {
+            using (var db = new mechanicContext())
+            {
+                db.Entry(data).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Deletes a vehicle from the database
+        /// </summary>
+        /// <param name="id">The ID of the customer to delete</param>
+        public void DeleteCustomer(int id)
+        {
+            using (var db = new mechanicContext())
+            {
+                Customer? customer = db.Customers.Where(x => x.Id == id).FirstOrDefault();
+                if (customer != null)
+                {
+                    db.Customers.Remove(customer);
                     db.SaveChanges();
                 }
             }

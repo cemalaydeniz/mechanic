@@ -91,8 +91,8 @@ namespace Mechanic.ViewModels
         }
 
         // List View binding
-        private List<Service> services = null!;
-        public List<Service> Services
+        private List<Service>? services;
+        public List<Service>? Services
         {
             get => services;
             set
@@ -190,18 +190,16 @@ namespace Mechanic.ViewModels
         private async void InitializeServices()
         {
             IsLoading = true;
-            Services = await ServiceSingleton.Instance.GetAllServices();
+            await ServiceSingleton.Instance.GetAllServicesAsync();
             IsLoading = false;
 
             UpdatePage(1);
-            RefreshListView();
+
+            Services = ServiceSingleton.Instance.AllServices?.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
         }
 
         private void OnSearchServices()
         {
-            if (ServiceSingleton.Instance.AllServices == null)
-                return;
-
             isSearching = ServiceSingleton.Instance.SearchServices(x => (string.IsNullOrEmpty(LicensePlate) || x.Vehicle.LicensePlate.Contains(LicensePlate, StringComparison.InvariantCultureIgnoreCase)) &&
                                                                         (string.IsNullOrEmpty(Make) || x.Vehicle.Make.StartsWith(Make, StringComparison.InvariantCultureIgnoreCase)) &&
                                                                         (string.IsNullOrEmpty(Model) || x.Vehicle.Model.StartsWith(Model, StringComparison.InvariantCultureIgnoreCase)) &&
@@ -227,10 +225,7 @@ namespace Mechanic.ViewModels
             }
             else
             {
-                if (ServiceSingleton.Instance.AllServices == null)
-                    return;
-
-                Services = ServiceSingleton.Instance.AllServices.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+                Services = ServiceSingleton.Instance.GetAllServices().Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             }
         }
 
@@ -255,15 +250,18 @@ namespace Mechanic.ViewModels
             }
             else
             {
-                if (ServiceSingleton.Instance.AllServices == null)
+                Services = ServiceSingleton.Instance.GetAllServices();
+                if (Services == null)
                 {
                     NumofPages = 0;
                     CurrentPage = 0;
                 }
                 else
                 {
-                    NumofPages = (int)Math.Ceiling((decimal)ServiceSingleton.Instance.AllServices.Count / PageSize);
+                    NumofPages = (int)Math.Ceiling((decimal)Services.Count / PageSize);
                     CurrentPage = pageNumber;
+
+                    Services = Services.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
                 }
             }
         }
