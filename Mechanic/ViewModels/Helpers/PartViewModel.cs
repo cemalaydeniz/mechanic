@@ -1,14 +1,58 @@
-﻿using Mechanic.Models;
+﻿using System.ComponentModel;
+
+using Mechanic.Models;
 
 
 namespace Mechanic.ViewModels.Helpers
 {
-    public class PartViewModel
+    public class PartViewModel : INotifyPropertyChanged
     {
-        public int ID { get; set; }
-        public string Name { get; set; } = null!;
-        public int NumberUsed { get; set; } = 1;
-        public string Price { get; set; } = null!;
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+
+        private int id;
+        public int ID
+        {
+            get => id;
+            set
+            {
+                id = value;
+                OnPropertyChanged(nameof(ID));
+            }
+        }
+
+        private string name = null!;
+        public string Name
+        {
+            get => name;
+            set
+            {
+                name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        private int numberUsed = 1;
+        public int NumberUsed
+        {
+            get => numberUsed;
+            set
+            {
+                numberUsed = value;
+                OnPropertyChanged(nameof(NumberUsed));
+            }
+        }
+
+        private string price = null!;
+        public string Price
+        {
+            get => price;
+            set
+            {
+                price = value;
+                OnPropertyChanged(nameof(Price));
+            }
+        }
 
 
         private PartViewModel() { }
@@ -17,6 +61,12 @@ namespace Mechanic.ViewModels.Helpers
         {
             ID = id;
         }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
 
 
         public static PartViewModel Converter(int id, Part part)

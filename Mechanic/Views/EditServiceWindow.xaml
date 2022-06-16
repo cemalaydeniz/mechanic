@@ -39,7 +39,7 @@
                                Text="License Plate"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
                              MaxLength="15"
-                             Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding VehicleLicensePlate, UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
                 </StackPanel>
 
@@ -49,28 +49,28 @@
                                Text="Make"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
                              MaxLength="50"
-                             Text="{Binding Make, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding VehicleMake, UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
 
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Model"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
                              MaxLength="50"
-                             Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding VehicleModel, UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
 
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Year"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
                              MaxLength="4"
-                             Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding VehicleYear, UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
 
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Color"/>
                     <TextBox Style="{StaticResource OneLineInputField}"
                              MaxLength="30"
-                             Text="{Binding Color, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding VehicleColor, UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
                 </StackPanel>
             </Grid>
@@ -168,7 +168,7 @@
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top"
                                     Margin="5 5 5 5">
                             <ItemsControl x:Name="IC_Parts"
-                                          ItemsSource="{Binding Parts, Mode=OneWay}">
+                                          ItemsSource="{Binding ServiceParts, Mode=OneWay}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal"
@@ -178,7 +178,7 @@
                                                        HorizontalAlignment="Left"/>
                                             <TextBox Style="{StaticResource OneLineInputField}"
                                                      MaxLength="50"
-                                                     Text="{Binding Name}"
+                                                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                                                      IsEnabled="{Binding Path=DataContext.IsReadOnly, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource ReverseBool}}"/>
 
                                             <TextBlock Style="{StaticResource InputFieldName}"
@@ -187,7 +187,7 @@
                                             <TextBox Style="{StaticResource OneLineInputField}"
                                                      Width="70" Height="23"
                                                      MaxLength="5"
-                                                     Text="{Binding NumberUsed}"
+                                                     Text="{Binding NumberUsed, UpdateSourceTrigger=PropertyChanged}"
                                                      IsEnabled="{Binding Path=DataContext.IsReadOnly, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource ReverseBool}}"/>
 
                                             <TextBlock Style="{StaticResource InputFieldName}"
@@ -195,7 +195,7 @@
                                                        HorizontalAlignment="Left"/>
                                             <TextBox Style="{StaticResource OneLineInputField}"
                                                      MaxLength="17"
-                                                     Text="{Binding Price}"
+                                                     Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}"
                                                      IsEnabled="{Binding Path=DataContext.IsReadOnly, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource ReverseBool}}"/>
 
                                             <Button Width="23" Height="23"
@@ -227,13 +227,13 @@
                             Margin="10 0 10 10">
                     <DatePicker VerticalAlignment="Center"
                                 Margin="0 0 10 0"
-                                Text="{Binding EnterDate}"
+                                SelectedDate="{Binding ServiceEnterDate}"
                                 IsEnabled="{Binding IsReadOnly, Converter={StaticResource ReverseBool}}"/>
                     <TextBlock Style="{StaticResource InputFieldName}"
                                Text="Exit Date"/>
                     <DatePicker VerticalAlignment="Center"
                                 Margin="10 0 10 0"
-                                Text="{Binding ExitDate}">
+                                SelectedDate="{Binding ServiceExitDate}">
                         <DatePicker.IsEnabled>
                             <MultiBinding Converter="{StaticResource ExitDateEnable}">
                                 <Binding ElementName="Cbx_Finished" Path="IsChecked"/>
@@ -284,7 +284,8 @@
                 HorizontalAlignment="Right"
                 Margin="0 7 0 0"
                 Padding="5 5 15 5"
-                Command="{Binding SaveServiceCommand}">
+                Command="{Binding SaveServiceCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
             <Button.Content>
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Icons/save-icon.png" Height="23" Margin="5 0 0 0"/>

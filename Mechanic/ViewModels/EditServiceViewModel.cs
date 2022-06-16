@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 using Mechanic.Services;
 using Mechanic.Models;
@@ -14,58 +16,58 @@ namespace Mechanic.ViewModels
     public class EditServiceViewModel : ViewModelBase
     {
         //~ Begin - Vehicle data
-        private string licensePlate = null!;
-        public string LicensePlate
+        private string vehicleLicensePlate = null!;
+        public string VehicleLicensePlate
         {
-            get => licensePlate;
+            get => vehicleLicensePlate;
             set
             {
-                licensePlate = value;
-                OnPropertyChanged(nameof(LicensePlate));
+                vehicleLicensePlate = value;
+                OnPropertyChanged(nameof(VehicleLicensePlate));
             }
         }
 
-        private string make = null!;
-        public string Make
+        private string vehicleMake = null!;
+        public string VehicleMake
         {
-            get => make;
+            get => vehicleMake;
             set
             {
-                make = value;
-                OnPropertyChanged(nameof(Make));
+                vehicleMake = value;
+                OnPropertyChanged(nameof(VehicleMake));
             }
         }
 
-        private string model = null!;
-        public string Model
+        private string vehicleModel = null!;
+        public string VehicleModel
         {
-            get => model;
+            get => vehicleModel;
             set
             {
-                model = value;
-                OnPropertyChanged(nameof(Model));
+                vehicleModel = value;
+                OnPropertyChanged(nameof(VehicleModel));
             }
         }
 
-        private int year;
-        public int Year
+        private int vehicleYear;
+        public int VehicleYear
         {
-            get => year;
+            get => vehicleYear;
             set
             {
-                year = value;
-                OnPropertyChanged(nameof(Year));
+                vehicleYear = value;
+                OnPropertyChanged(nameof(VehicleYear));
             }
         }
 
-        private string color = null!;
-        public string Color
+        private string vehicleColor = null!;
+        public string VehicleColor
         {
-            get => color;
+            get => vehicleColor;
             set
             {
-                color = value;
-                OnPropertyChanged(nameof(Color));
+                vehicleColor = value;
+                OnPropertyChanged(nameof(VehicleColor));
             }
         }
         //~ End
@@ -106,14 +108,14 @@ namespace Mechanic.ViewModels
             }
         }
 
-        private ObservableCollection<PartViewModel> parts = new ObservableCollection<PartViewModel>();
-        public ObservableCollection<PartViewModel> Parts
+        private ObservableCollection<PartViewModel> serviceParts = new ObservableCollection<PartViewModel>();
+        public ObservableCollection<PartViewModel> ServiceParts
         {
-            get => parts;
+            get => serviceParts;
             private set
             {
-                parts = value;
-                OnPropertyChanged(nameof(Parts));
+                serviceParts = value;
+                OnPropertyChanged(nameof(ServiceParts));
             }
         }
 
@@ -128,25 +130,25 @@ namespace Mechanic.ViewModels
             }
         }
 
-        private DateTime enterDate = DateTime.Now;
-        public DateTime EnterDate
+        private DateTime serviceEnterDate;
+        public DateTime ServiceEnterDate
         {
-            get => enterDate;
+            get => serviceEnterDate;
             set
             {
-                enterDate = value;
-                OnPropertyChanged(nameof(EnterDate));
+                serviceEnterDate = value;
+                OnPropertyChanged(nameof(ServiceEnterDate));
             }
         }
 
-        private DateTime? exitDate;
-        public DateTime? ExitDate
+        private DateTime? serviceExitDate;
+        public DateTime? ServiceExitDate
         {
-            get => exitDate;
+            get => serviceExitDate;
             set
             {
-                exitDate = value;
-                OnPropertyChanged(nameof(ExitDate));
+                serviceExitDate = value;
+                OnPropertyChanged(nameof(ServiceExitDate));
             }
         }
 
@@ -156,6 +158,15 @@ namespace Mechanic.ViewModels
             get => isFinished;
             set
             {
+                if (!isFinished && value)
+                {
+                    ServiceExitDate = DateTime.Now;
+                }
+                else if (isFinished && !value)
+                {
+                    ServiceExitDate = null;
+                }
+
                 isFinished = value;
                 OnPropertyChanged(nameof(IsFinished));
             }
@@ -181,6 +192,10 @@ namespace Mechanic.ViewModels
         public ICommand SaveServiceCommand { get; }
         //~ End
 
+        /** Null if the service is new. Not null if the service exists already
+         * Is is used to detect if the window is in edit mode */
+        public int? ServiceID { get; private set; }
+
         // The next ID of a new part
         private int nextIDPart = 0;
 
@@ -192,34 +207,64 @@ namespace Mechanic.ViewModels
 
             EditServiceCommand = new EditServiceCommand(this);
             SaveServiceCommand = new SaveServiceCommand(this);
+
+            serviceParts.CollectionChanged += OnCollectionChanged;
+        }
+
+        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    ((INotifyPropertyChanged)item).PropertyChanged += ItemPropertyChanged;
+                }
+            }
+            if (e.OldItems != null)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    ((INotifyPropertyChanged)item).PropertyChanged -= ItemPropertyChanged;
+                }
+            }
+        }
+
+        private void ItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(ServiceParts));
         }
 
         /// <summary>
-        /// Fills the text fields if a vehicle with the license place exists.
-        /// This doesn't fill any service data
+        /// Fills the text fields if a vehicle with the license place exists. This doesn't fill any service data
+        /// Use this if the service is new
         /// </summary>
         /// <param name="licensePlate">The license plate of the vehicle</param>
         public void FillForm(string licensePlate)
         {
+            ServiceEnterDate = DateTime.Now;
+
             Vehicle? vehicle = ServiceSingleton.Instance.GetVehicle(licensePlate);
             if (vehicle == null)
             {
-                LicensePlate = licensePlate;
+                VehicleLicensePlate = licensePlate;
                 return;
             }
 
-            LicensePlate = vehicle.LicensePlate;
-            Make = vehicle.Make;
-            Model = vehicle.Model;
-            Year = vehicle.Year;
-            Color = vehicle.Color;
+            VehicleLicensePlate = vehicle.LicensePlate;
+            VehicleMake = vehicle.Make;
+            VehicleModel = vehicle.Model;
+            VehicleYear = vehicle.Year;
+            VehicleColor = vehicle.Color;
 
             CustomerName = vehicle.Customer?.Name;
             CustomerContact = vehicle.Customer?.Contact;
+
+            ServiceID = null;
         }
 
         /// <summary>
         /// Fills the text fields including the service data
+        /// Use this if the service will be edited or shown
         /// </summary>
         /// <param name="service">The service data to fill the form</param>
         public void FillForm(Service service)
@@ -227,35 +272,37 @@ namespace Mechanic.ViewModels
             if (service == null)
                 return;
 
-            LicensePlate = service.Vehicle.LicensePlate;
-            Make = service.Vehicle.Make;
-            Model = service.Vehicle.Model;
-            Year = service.Vehicle.Year;
-            Color = service.Vehicle.Color;
+            VehicleLicensePlate = service.Vehicle.LicensePlate;
+            VehicleMake = service.Vehicle.Make;
+            VehicleModel = service.Vehicle.Model;
+            VehicleYear = service.Vehicle.Year;
+            VehicleColor = service.Vehicle.Color;
 
             CustomerName = service.Vehicle.Customer?.Name;
             CustomerContact = service.Vehicle.Customer?.Contact;
 
             ServiceDetails = service.Details;
             ServiceFee = service.Fee.ToString("0.00");
-            EnterDate = service.EnterDate.ToDateTime(TimeOnly.MinValue);
+            ServiceEnterDate = service.EnterDate.ToDateTime(TimeOnly.MinValue);
             
             if (service.ExitDate == null)
             {
-                ExitDate = null;
+                ServiceExitDate = null;
                 IsFinished = false;
             }
             else
             {
-                ExitDate = service.ExitDate.Value.ToDateTime(TimeOnly.MinValue);
+                ServiceExitDate = service.ExitDate.Value.ToDateTime(TimeOnly.MinValue);
                 IsFinished = true;
             }
 
             foreach (var part in service.Parts)
             {
-                Parts.Add(PartViewModel.Converter(nextIDPart, part));
+                ServiceParts.Add(PartViewModel.Converter(nextIDPart, part));
                 nextIDPart++;
             }
+
+            ServiceID = service.Id;
         }
 
         /// <summary>
@@ -263,8 +310,10 @@ namespace Mechanic.ViewModels
         /// </summary>
         public void AddNewPart()
         {
-            parts.Add(new PartViewModel(nextIDPart));
+            ServiceParts.Add(new PartViewModel(nextIDPart));
             nextIDPart++;
+
+            OnPropertyChanged(nameof(ServiceParts));
         }
 
         /// <summary>
@@ -273,11 +322,13 @@ namespace Mechanic.ViewModels
         /// <param name="id">The ID of the part</param>
         public void RemovePart(int id)
         {
-            PartViewModel? part = parts.Where(x => x.ID == id).FirstOrDefault();
+            PartViewModel? part = ServiceParts.Where(x => x.ID == id).FirstOrDefault();
             if (part == null)
                 return;
 
-            parts.Remove(part);
+            ServiceParts.Remove(part);
+
+            OnPropertyChanged(nameof(ServiceParts));
         }
     }
 }

@@ -36,6 +36,7 @@ namespace Mechanic.Services
         public List<Service>? LastSearchResult { get; set; }
 
 
+
         /// <summary>
         /// Get all the services asynchronously
         /// </summary>
@@ -83,12 +84,15 @@ namespace Mechanic.Services
         /// Adds a new service to the database
         /// </summary>
         /// <param name="data">Service data to add</param>
-        public void AddService(Service data)
+        /// <returns>Returns the ID of the new service</returns>
+        public int AddService(Service data)
         {
             using (var db = new mechanicContext())
             {
                 db.Services.Add(data);
                 db.SaveChanges();
+
+                return data.Id;
             }
         }
 
@@ -142,12 +146,15 @@ namespace Mechanic.Services
         /// Adds a new vehicle to the database
         /// </summary>
         /// <param name="data">Vehicle data to add</param>
-        public void AddVehicle(Vehicle data)
+        /// <returns>Returns the ID of the new vehicle</returns>
+        public int AddVehicle(Vehicle data)
         {
             using (var db = new mechanicContext())
             {
                 db.Vehicles.Add(data);
                 db.SaveChanges();
+
+                return data.Id;
             }
         }
 
@@ -193,16 +200,19 @@ namespace Mechanic.Services
 
 
 
-        /// <summary>
+        /// /// <summary>
         /// Adds a new customer to the database
         /// </summary>
         /// <param name="data">Customer data to add</param>
-        public void AddCustomer(Customer data)
+        /// <returns>Returns the ID of the new customer</returns>
+        public int AddCustomer(Customer data)
         {
             using (var db = new mechanicContext())
             {
                 db.Customers.Add(data);
                 db.SaveChanges();
+
+                return data.Id;
             }
         }
 
