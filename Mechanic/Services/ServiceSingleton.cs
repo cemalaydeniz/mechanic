@@ -155,7 +155,7 @@ namespace Mechanic.Services
         /// Updates a vehicle on the database
         /// </summary>
         /// <param name="data">New vehicle data to update</param>
-        public void UpdatesVehicle(Vehicle data)
+        public void UpdateVehicle(Vehicle data)
         {
             using (var db = new mechanicContext())
             {
