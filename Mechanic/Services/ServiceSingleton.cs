@@ -126,6 +126,50 @@ namespace Mechanic.Services
             }
         }
 
+        /// <summary>
+        /// Adds parts to the related service on the database
+        /// </summary>
+        /// <param name="id">ID of the service to add to</param>
+        /// <param name="parts">Parts to be added</param>
+        public void AddParts(int id, List<Part> parts)
+        {
+            using (var db = new mechanicContext())
+            {
+                Service? service = db.Services.FirstOrDefault(x => x.Id == id);
+                if (service != null)
+                {
+                    foreach (var part in parts)
+                    {
+                        part.ServiceId = service.Id;
+                        db.Parts.Add(part);
+                    }
+
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deletes all the parts from a service on the database
+        /// </summary>
+        /// <param name="id">ID of the service to delete parts from</param>
+        public void DeleteParts(int id)
+        {
+            using (var db = new mechanicContext())
+            {
+                Service? service = db.Services.Include(x => x.Parts).FirstOrDefault(x => x.Id == id);
+                if (service != null)
+                {
+                    foreach (var part in service.Parts)
+                    {
+                        db.Parts.Remove(part);
+                    }
+
+                    db.SaveChanges();
+                }
+            }
+        }
+
 
 
         /// <summary>
