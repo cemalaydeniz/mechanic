@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 using Mechanic.ViewModels;
 
@@ -25,16 +13,17 @@ namespace Mechanic.Views
         private EditServiceViewModel viewModel = null!;
 
 
-        public EditServiceWindow(bool isReadOnly)
+        public EditServiceWindow(string windowName, bool isReadOnly)
         {
             InitializeComponent();
-            Initialize(isReadOnly);
+            Initialize(windowName, isReadOnly);
         }
 
-        private void Initialize(bool isReadOnly)
+        private void Initialize(string windowName, bool isReadOnly)
         {
             viewModel = (EditServiceViewModel)DataContext;
 
+            viewModel.WindowName = windowName;
             viewModel.IsReadOnly = isReadOnly;
         }
     }

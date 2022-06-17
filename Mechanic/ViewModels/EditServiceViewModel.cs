@@ -15,6 +15,17 @@ namespace Mechanic.ViewModels
 {
     public class EditServiceViewModel : ViewModelBase
     {
+        private string windowName = null!;
+        public string WindowName
+        {
+            get => windowName;
+            set
+            {
+                windowName = value;
+                OnPropertyChanged(nameof(WindowName));
+            }
+        }
+
         //~ Begin - Vehicle data
         private string vehicleLicensePlate = null!;
         public string VehicleLicensePlate
