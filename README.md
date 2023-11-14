@@ -22,18 +22,18 @@ This project is licensed under the GPL-3.0 License - see the LICENSE.md file for
 # Deutsch
 
 ## Mechaniker
-Das ist eine WPF App, die mit C# erstellt wurde. Das Anwendung wird verwendet, um Reparatur-/Serviceaufzeichnungen für einen Mechaniker zu aufbewahren
+Das ist eine WPF-App, die mittels C# erstellt wurde. Die Application wird verwendet, um Reparatur-/Serviceaufzeichnungen für einen Mechaniker zu speichern
 
 ## Erste Schritte
 ### Abhängigkeiten
-- Die Anwendung wurde mit .Net 6.0 erstellt\
+- Die Application wurde mit .Net 6.0 erstellt\
 https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 
-- MySQL wird als die Datenbank verwendet\
+- MySQL wurde als die Datenbank verwendet\
 https://dev.mysql.com/downloads/
 
 ## Lienz
-Das Projekt wird unter der GPL-3.0 Lienz lizenziert - sehen Sie die LICENSE.md Datei für Details
+Das Projekt wird unter der GPL-3.0-Lizenz lizenziert - sehen Sie die LICENSE.md Datei für Details
 
 # Screenshots / Bildschrimfotos
 ![01](https://raw.githubusercontent.com/cemalaydeniz/mechanic/main/Screenshots/01.png)\
