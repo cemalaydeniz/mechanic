@@ -1,9 +1,3 @@
-[English](#english)\
-[Deutsch](#deutsch)\
-[Screenshots / Bildschrimfotos](#screenshots--bildschrimfotos)
-
-# English
-
 ## Mechanic
 This is a WPF created with C#. The program is used to keep repair/service records for a mechanic.
 
@@ -18,24 +12,7 @@ https://dev.mysql.com/downloads/
 ## License
 This project is licensed under the GPL-3.0 License - see the LICENSE.md file for details
 
-
-# Deutsch
-
-## Mechaniker
-Das ist eine WPF-App, die mittels C# erstellt wurde. Die Application wird verwendet, um Reparatur-/Serviceaufzeichnungen für einen Mechaniker zu speichern
-
-## Erste Schritte
-### Abhängigkeiten
-- Die Application wurde mit .Net 6.0 erstellt\
-https://dotnet.microsoft.com/en-us/download/dotnet/6.0
-
-- MySQL wurde als die Datenbank verwendet\
-https://dev.mysql.com/downloads/
-
-## Lienz
-Das Projekt wird unter der GPL-3.0-Lizenz lizenziert - sehen Sie die LICENSE.md Datei für Details
-
-# Screenshots / Bildschrimfotos
+# Screenshots
 ![01](https://raw.githubusercontent.com/cemalaydeniz/mechanic/main/Screenshots/01.png)\
 ![02](https://raw.githubusercontent.com/cemalaydeniz/mechanic/main/Screenshots/02.png)\
 ![03](https://raw.githubusercontent.com/cemalaydeniz/mechanic/main/Screenshots/03.png)
