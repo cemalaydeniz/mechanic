@@ -9,15 +9,13 @@ This is a WPF created with C#. The program is used to keep repair/service record
 
 ## Getting Started
 ### Dependencies
-- [.Net Core](https://dotnet.microsoft.com/download/) Version 6.0
+- [.Net Core](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) Version 6.0
+- [Entity Framework Core](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) Version 6.0.5
 ```
-dotnet install --version 6.0
+dotnet add package Microsoft.EntityFrameworkCore --version 6.0.5
 ```
-- [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) Version 6.0.5
-```
-dotnet tool install --global dotnet-ef --version 6.0.5
-```
-- [Pomelo EF Core MySQL](https://docs.microsoft.com/en-us/ef/core/) Version 6.0.1
+- [MySQL](https://dev.mysql.com/downloads/mysql/8.0.html) Version 8.0.29
+- [Pomelo EF Core MySQL](https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql) Version 6.0.1
 ```
 dotnet add package Pomelo.EntityFrameworkCore.MySql --version 6.0.1
 ```
